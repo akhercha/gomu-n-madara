@@ -1,0 +1,33 @@
+services:
+  madara:
+    build:
+      context: .
+      dockerfile: Dockerfile.madara
+    container_name: madara
+    ports:
+      - "9944:9944"  # RPC port
+      - "9933:9933"  # WebSocket port
+      - "30333:30333"  # P2P port
+    expose:
+      - 9944
+    networks:
+      - testing
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9944"]
+      interval: 5s
+      timeout: 2s
+      retries: 10
+
+  gomu:
+    build:
+      context: .
+      dockerfile: Dockerfile.gomu
+    container_name: gomu
+    depends_on:
+      madara:
+        condition: service_healthy
+    networks:
+      - testing
+
+networks:
+  testing:
