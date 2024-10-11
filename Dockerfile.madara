@@ -27,7 +27,7 @@ WORKDIR /app
 RUN git clone https://github.com/madara-alliance/madara.git .
 
 # Build the Madara project
-RUN cargo build --release
+RUN cargo build
 
 # Expose the ports used by Madara
 EXPOSE 9944 9933 30333 9615
