@@ -21,9 +21,7 @@ ENV PATH="/root/.local/bin:${PATH}"
 WORKDIR /app
 
 RUN git clone https://github.com/madara-alliance/madara.git .
-RUN git fetch origin
-RUN git checkout mempool-fixes
-
+RUN git pull
 RUN cargo build --release
 
 # Expose the ports used by Madara
