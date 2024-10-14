@@ -1,7 +1,5 @@
-# Use the official Rust image as the base
 FROM rust:1.81
 
-# Install necessary dependencies
 RUN apt-get update && apt-get install -y \
     cmake \
     libclang-dev \
@@ -20,17 +18,15 @@ RUN curl --proto '=https' --tlsv1.2 -sSf https://docs.swmansion.com/scarb/instal
 # Add Scarb to PATH
 ENV PATH="/root/.local/bin:${PATH}"
 
-# Set the working directory
 WORKDIR /app
 
-# Clone the Madara repository
 RUN git clone https://github.com/madara-alliance/madara.git .
+RUN git fetch
+RUN git checkout origin/fix-nonce-block-prod
 
-# Build the Madara project
 RUN cargo build
 
 # Expose the ports used by Madara
 EXPOSE 9944 9933 30333 9615
 
-# Run Madara in devnet mode when the container starts
 CMD ["cargo", "run", "--", "--devnet", "--rpc-external", "--rpc-methods", "unsafe", "--rpc-cors", "all", "--chain-config-override", "block_time=1s,pending_block_update_time=100ms"]
