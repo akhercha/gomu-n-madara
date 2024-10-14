@@ -21,12 +21,12 @@ ENV PATH="/root/.local/bin:${PATH}"
 WORKDIR /app
 
 RUN git clone https://github.com/madara-alliance/madara.git .
-RUN git fetch
-RUN git checkout origin/fix-nonce-block-prod
+RUN git fetch origin
+RUN git checkout mempool-fixes
 
-RUN cargo build
+RUN cargo build --release
 
 # Expose the ports used by Madara
 EXPOSE 9944 9933 30333 9615
 
-CMD ["cargo", "run", "--", "--devnet", "--rpc-external", "--rpc-methods", "unsafe", "--rpc-cors", "all", "--chain-config-override", "block_time=1s,pending_block_update_time=100ms"]
+CMD ["cargo", "run", "--release", "--", "--devnet", "--rpc-external", "--rpc-methods", "unsafe", "--rpc-cors", "all", "--chain-config-override", "block_time=1s,pending_block_update_time=100ms"]

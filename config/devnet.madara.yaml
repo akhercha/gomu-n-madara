@@ -24,7 +24,7 @@ run:
       shoot: 5000
   read_benches:
     - name: "Get Events"
-      num_requests: 100
+      num_requests: 1000
       method: "starknet_getEvents"
       parameters_location: "config/read_params/get_events.json"
 
@@ -34,6 +34,6 @@ report:
 
 deployer:
   salt: "0x1"
-  address: "0x6b09c5cca7e5ef944dc3be7514cc1ae5a6e267f0f1f2b5520e90dc00aecf6e1"
-  signing_key: "0x76f2ccdb23f29bc7b69278e947c01c6160a31cf02c19d06d0f6e5ab1d768b86"
+  address: "0x06b09c5cca7e5ef944dc3be7514cc1ae5a6e267f0f1f2b5520e90dc00aecf6e1"
+  signing_key: "0x076f2ccdb23f29bc7b69278e947c01c6160a31cf02c19d06d0f6e5ab1d768b86"
   legacy_account: false
