@@ -7,24 +7,26 @@ RUN apt-get update && apt-get install -y \
     libssl-dev \
     pkg-config \
     build-essential \
-    python3
+    python3 \
+    git
 
-# Set the SHELL environment variable
 ENV SHELL=/bin/bash
 
-# Install Scarb
-RUN curl --proto '=https' --tlsv1.2 -sSf https://docs.swmansion.com/scarb/install.sh | sh -s --
+RUN git clone https://github.com/asdf-vm/asdf.git ~/.asdf --branch v0.14.1
+RUN echo '. "$HOME/.asdf/asdf.sh"' >> ~/.bashrc
+RUN echo '. "$HOME/.asdf/completions/asdf.bash"' >> ~/.bashrc
+ENV PATH="/root/.asdf/shims:/root/.asdf/bin:${PATH}"
 
-# Add Scarb to PATH
-ENV PATH="/root/.local/bin:${PATH}"
+RUN asdf plugin add scarb
+RUN asdf install scarb 2.8.2
+RUN asdf global scarb 2.8.2
 
 WORKDIR /app
 
 RUN git clone https://github.com/madara-alliance/madara.git .
-RUN git pull
 RUN cargo build --release
+RUN scarb --version
 
-# Expose the ports used by Madara
 EXPOSE 9944 9933 30333 9615
 
 CMD ["cargo", "run", "--release", "--", "--devnet", "--rpc-external", "--rpc-methods", "unsafe", "--rpc-cors", "all", "--chain-config-override", "block_time=1s,pending_block_update_time=100ms"]
